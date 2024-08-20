@@ -1,0 +1,36 @@
+model:
+  target: cipf.models.protloc.ProtLoc
+  parameters:
+    image_size: 224
+    patch_size: 14
+    embedding_dim: 768
+    state_dim: 768
+    embedding_rows: 2048
+    embedding_cols: 2048
+    depth: 8
+    num_heads: 16
+    block_len: 32
+    mlp_ratio: 4.0
+    commitment_cost: 0.25
+dataset:
+  target: cipf.dataset.pods.PodsDataset
+  parameters:
+    cell_line: 'U2OS'
+    batch_size: 32
+    image_size: 224
+    cache: False
+trainer:
+  num_epochs: 60
+  optimizer:
+    target: optax.adamw
+    parameters:
+      b1: 0.9
+      b2: 0.95
+      weight_decay: 0.05
+  scheduler:
+    target: optax.warmup_cosine_decay_schedule
+    parameters:
+      init_value: 0
+      peak_value: 0.0003
+      warmup_epochs: 12
+      decay_epochs: 60
